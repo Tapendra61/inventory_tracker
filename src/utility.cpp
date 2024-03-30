@@ -7,8 +7,6 @@ void ClearInputBuffer()
 
 int NameLengthLimitExceeded(char name[], int limit) 
 {
-	for(int i = 0; name[i] != '\0'; i++) 
-	{
-		
-	}
+	int length = strlen(name);
+	return length > limit;
 }
