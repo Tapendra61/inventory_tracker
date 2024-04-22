@@ -5,26 +5,9 @@ void ClearInputBuffer()
 	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 }
 
-int NameLengthLimitExceeded(char* name, int limit)
+int NameMatches(std::string *name1, std::string *name2)
 {
-	int length = strlen(name);
-	return length > limit;
-}
-
-int NameMatches(char name1[], char name2[])
-{
-	ToLower(name1);
-	ToLower(name2);
-	return !strcmp(name1, name2);
-}
-
-void ToLower(char *str)
-{
-	int i = 0;
-	for (i = 0; i < strlen(str); i++)
-	{
-		str[i] = tolower(str[i]);
-	}
+	return *name1 == *name2;
 }
 
 void ClearConsole()
@@ -34,4 +17,18 @@ void ClearConsole()
 #else
 	system("clear");
 #endif
+}
+
+int IsAlphabetical(std::string *word)
+{
+	int flag = 1;
+	for (char c : *word)
+	{
+		if (isalpha(c) || c == ' ')
+			continue;
+		else
+			flag = 0;
+	}
+
+	return flag;
 }

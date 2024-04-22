@@ -44,9 +44,9 @@ void AddItemType()
 		std::cout << "Enter the name of the item type you want to add:" << std::endl;
 		std::getline(std::cin, item_type_name);
 
-		if (item_type_name.length() > 30)
+		if (item_type_name.length() > 30 || !IsAlphabetical(&item_type_name))
 		{
-			std::cout << "The name of item type must have only 30 characters or less." << std::endl;
+			std::cout << "The name of item type must have only 30 characters or less and should contain only alphabets." << std::endl;
 			ClearInputBuffer();
 			continue;
 		}

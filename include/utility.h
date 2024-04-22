@@ -1,9 +1,10 @@
 #pragma once
 #include<iostream>
 #include<limits>
-#include<cstring>
+#include<string>
+#include<cctype>
+
 void ClearInputBuffer();
-int NameLengthLimitExceeded(char name[], int limit);
-int NameMatches(char[], char[]);
-void ToLower(char*);
+int NameMatches(std::string*, std::string*);
 void ClearConsole();
+int IsAlphabetical(std::string*) ;
