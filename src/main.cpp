@@ -10,6 +10,5 @@ int main()
 	{
 		MainMenu();
 	}
-	ClearInputBuffer();
 	return 0;
 }

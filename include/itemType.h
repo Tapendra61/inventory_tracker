@@ -1,15 +1,15 @@
 #pragma once
-#include<cstring>
+#include<string>
 
 class ItemType {
 	private:
-		char name[30];
+		std::string name;
 		float price;
 
 	public:
 		ItemType();
-		char* GetName();
-		void SetName(char value[30]);
+		std::string GetName();
+		void SetName(std::string name);
 		float GetPrice();
 		void SetPrice(float value);
 };
