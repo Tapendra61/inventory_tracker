@@ -1,16 +1,16 @@
 #include "itemType.h"
 
 ItemType::ItemType() {
-	memset(name, '\0', sizeof(name));
+	name = "";
 	price = 0.0;
 }
 
-char* ItemType::GetName() 
+std::string ItemType::GetName() 
 {
 	return name;
 }
 
-void ItemType::SetName(char value[30]) 
+void ItemType::SetName(std::string value)
 {
-	strcpy(name, value);
+	name = value;
 }
