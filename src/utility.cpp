@@ -7,7 +7,20 @@ void ClearInputBuffer()
 
 int NameMatches(std::string *name1, std::string *name2)
 {
-	return *name1 == *name2;
+	std::string value1;
+	std::string value2;
+	
+	for(char c : *name1) 
+	{
+		value1 += tolower(c);
+	}
+
+	for(char c : *name2) 
+	{
+		value2 += tolower(c);
+	}
+
+	return value1 == value2;
 }
 
 void ClearConsole()
