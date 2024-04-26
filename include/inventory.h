@@ -3,10 +3,10 @@
 #include <fstream>
 #include "itemType.h"
 
-using namespace std;
+const char* ITEM_TYPE_FILE = "./res/ItemTypes.DAT";
 
 class Inventory
 {
 	public:
-		void AddItemType(char name[]);
+		void AddItemType(ItemType type);
 };

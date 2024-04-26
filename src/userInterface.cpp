@@ -38,6 +38,8 @@ void AddItemType()
 	ClearConsole();
 	ItemType item_type;
 	std::string item_type_name;
+	std::string item_type_price;
+	float item_type_price_flt = 0.0;
 
 	while (1)
 	{
@@ -54,7 +56,36 @@ void AddItemType()
 			break;
 	}
 
-	std::cout << "Name is valid: " << item_type_name << std::endl;
+	item_type.SetName(item_type_name);
+
+	while (1)
+	{
+		std::cout << "Enter the price of item type: " << item_type_name << std::endl;
+		std::getline(std::cin, item_type_price);
+
+		try
+		{
+			std::size_t pos;
+
+			item_type_price_flt = std::stof(item_type_price, &pos);
+			if (pos < item_type_price.size())
+			{
+				throw std::invalid_argument("Extra characters found after the numeric value!");
+			}
+			break;
+		}
+		catch (const std::invalid_argument &e)
+		{
+			std::cout << "Only numeric values can be entered for item price. Please try again!" << std::endl;
+			item_type_price = "";
+			item_type_price_flt = 0;
+			continue;
+		}
+	}
+
+	item_type.SetPrice(item_type_price_flt);
+
+	
 
 	std::cin.get();
 }

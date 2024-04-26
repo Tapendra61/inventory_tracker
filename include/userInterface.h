@@ -4,6 +4,7 @@
 #include"itemType.h"
 #include"utility.h"
 #include<string>
+#include<cctype>
 
 void MainMenu();
 void ListItems();
