@@ -8,11 +8,13 @@ void MainMenu()
 	std::cout << "1. List Items" << std::endl;
 	std::cout << "2. Add Item" << std::endl;
 	std::cout << "3. Remove Item" << std::endl;
-	std::cout << "4. Add Item Type" << std::endl;
-	std::cout << "5. Remove Item Type" << std::endl;
-	std::cout << "6. Exit" << std::endl;
+	std::cout << "4. List Item Types" << std::endl;
+	std::cout << "5. Add Item Type" << std::endl;
+	std::cout << "6. Remove Item Type" << std::endl;
+	std::cout << "7. Exit" << std::endl;
 
 	std::cin >> option;
+	ClearInputBuffer();
 
 	switch (option)
 	{
@@ -20,7 +22,9 @@ void MainMenu()
 		ListItems();
 		break;
 	case 4:
-		ClearInputBuffer();
+		ListItemTypes();
+		break;
+	case 5:
 		AddItemType();
 		break;
 	default:
@@ -36,6 +40,8 @@ void ListItems()
 void AddItemType()
 {
 	ClearConsole();
+
+	Inventory inv;
 	ItemType item_type;
 	std::string item_type_name;
 	std::string item_type_price;
@@ -85,7 +91,16 @@ void AddItemType()
 
 	item_type.SetPrice(item_type_price_flt);
 
-	
+	inv.AddItemType(item_type);
 
+	std::cin.get();
+}
+
+void ListItemTypes() 
+{
+	ClearConsole();
+	std::cout << "Item Type List" << std::endl << std::endl;
+	Inventory inv;
+	inv.ListItemTypes();
 	std::cin.get();
 }
