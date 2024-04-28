@@ -3,6 +3,7 @@
 #define ITEM_NAME_LIMIT 30
 void MainMenu()
 {
+	ClearConsole();
 	int option = 0;
 	std::cout << "<----------------------------------->" << std::endl;
 	std::cout << "1. List Items" << std::endl;
