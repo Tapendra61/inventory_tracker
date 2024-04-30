@@ -3,6 +3,11 @@
 const char *ITEM_TYPE_FILE = "./res/ItemTypes.DAT";
 const char *STOCKED_ITEMS_FILE = "./res/StockedItems.DAT";
 
+void Inventory::AddItem(ItemType type) 
+{
+	
+}
+
 void Inventory::AddItemType(ItemType type)
 {
 	if(ItemTypeExists(type)) 

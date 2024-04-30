@@ -22,6 +22,9 @@ void MainMenu()
 	case 1:
 		ListItems();
 		break;
+	case 2:
+		AddItem();
+		break;
 	case 4:
 		ListItemTypes();
 		break;
@@ -36,6 +39,11 @@ void MainMenu()
 void ListItems()
 {
 	return;
+}
+
+void AddItem() 
+{
+	
 }
 
 void AddItemType()
@@ -97,10 +105,11 @@ void AddItemType()
 	std::cin.get();
 }
 
-void ListItemTypes() 
+void ListItemTypes()
 {
 	ClearConsole();
-	std::cout << "Item Type List" << std::endl << std::endl;
+	std::cout << "Item Type List" << std::endl
+			  << std::endl;
 	Inventory inv;
 	inv.ListItemTypes();
 	std::cin.get();
