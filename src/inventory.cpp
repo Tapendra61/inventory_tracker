@@ -3,19 +3,53 @@
 const char *ITEM_TYPE_FILE = "./res/ItemTypes.DAT";
 const char *STOCKED_ITEMS_FILE = "./res/StockedItems.DAT";
 
-void Inventory::AddItem(ItemType type) 
+void Inventory::AddItem(int option, int quantity)
 {
-	
+
+	ItemType* type = TypeAtIndex(option);
+	if(type == nullptr) 
+	{
+		std::cout << "Could not add item type of position: " << option + 1 << ". Invalid option??" << std::endl;
+		std::cin.get();
+		delete type;
+		return;
+	}
+
+	std::ofstream stocked_items_file(STOCKED_ITEMS_FILE, std::ios::app);
+	if(!stocked_items_file) 
+	{
+		std::cout << "Couldn't find file StockedItems.DAT. Item addition failed!!!" << std::endl;
+		stocked_items_file.close();
+		std::cin.get();
+		delete type;
+		return;
+	}
+
+	stocked_items_file << type->GetName() << "," << type->GetPrice() << "," << quantity << std::endl;
+
+	if(stocked_items_file.fail()) 
+	{
+		std::cout << "Failed to write data to the file!!!" << std::endl;
+		std::cin.get();
+		delete type;
+		stocked_items_file.close();
+		return;
+	}
+
+	std::cout << "Successfully added item to the inventory." << std::endl;
+	delete type;
+	stocked_items_file.close();
+	return;
 }
 
 void Inventory::AddItemType(ItemType type)
 {
-	if(ItemTypeExists(type)) 
+	if (ItemTypeExists(type))
 	{
 		std::cout << "An item type with name: " << type.GetName() << " already exists!!!" << std::endl;
 		return;
 	}
-	
+
 	std::ofstream item_types_file(ITEM_TYPE_FILE, std::ios::app | std::ios::binary);
 
 	if (!item_types_file)
@@ -104,7 +138,7 @@ int Inventory::ItemTypeExists(ItemType type)
 		{
 			if (i % 2 == 0)
 			{
-				if(NameMatches(&token, &input_item_name))
+				if (NameMatches(&token, &input_item_name))
 				{
 					flag = 1;
 				}
@@ -118,4 +152,47 @@ int Inventory::ItemTypeExists(ItemType type)
 
 	item_types_file.close();
 	return flag;
+}
+
+ItemType *Inventory::TypeAtIndex(int index)
+{
+	ItemType *type = new ItemType();
+	std::ifstream item_type_file(ITEM_TYPE_FILE, std::ios::in);
+	if (!item_type_file)
+	{
+		std::cout << "Error reading file: ItemTypes.DAT!!!" << std::endl;
+		item_type_file.close();
+		std::cin.get();
+		type = nullptr;
+		return type;
+	}
+
+	std::string line = "";
+	int i = 0;
+	int count = 0;
+	while (std::getline(item_type_file, line))
+	{
+		if (count == index)
+		{
+			std::stringstream stream(line);
+			std::string token;
+			while (std::getline(stream, token, ','))
+			{
+				if(i % 2 == 0) 
+				{
+					type->SetName(token);
+					i++;
+					continue;
+				}
+				type->SetPrice(std::stof(token));
+				i++;
+			}
+			item_type_file.close();
+			return type;
+		}
+		count++;
+	}
+	item_type_file.close();
+	type = nullptr;
+	return type;
 }

@@ -5,14 +5,16 @@ void MainMenu()
 {
 	ClearConsole();
 	int option = 0;
+	std::cout << "Inventory Management System" << std::endl;
 	std::cout << "<----------------------------------->" << std::endl;
 	std::cout << "1. List Items" << std::endl;
 	std::cout << "2. Add Item" << std::endl;
 	std::cout << "3. Remove Item" << std::endl;
-	std::cout << "4. List Item Types" << std::endl;
-	std::cout << "5. Add Item Type" << std::endl;
-	std::cout << "6. Remove Item Type" << std::endl;
-	std::cout << "7. Exit" << std::endl;
+	std::cout << "4. Search Item" << std::endl;
+	std::cout << "5. List Item Types" << std::endl;
+	std::cout << "6. Add Item Type" << std::endl;
+	std::cout << "7. Remove Item Type" << std::endl;
+	std::cout << "8. Exit" << std::endl;
 
 	std::cin >> option;
 	ClearInputBuffer();
@@ -25,10 +27,10 @@ void MainMenu()
 	case 2:
 		AddItem();
 		break;
-	case 4:
+	case 5:
 		ListItemTypes();
 		break;
-	case 5:
+	case 6:
 		AddItemType();
 		break;
 	default:
@@ -43,7 +45,40 @@ void ListItems()
 
 void AddItem() 
 {
-	
+	ClearConsole();
+	Inventory inv;
+	int option = 0;
+	int quantity = 0;
+	std::cout << "Add Item Menu" << std:: endl;
+	std::cout << "-----------------------" << std::endl;
+	std::cout << "Which type of item would you like to add to the inventory?" << std::endl;
+	inv.ListItemTypes();
+	while(1) 
+	{
+		std::cin >> option;
+		ClearInputBuffer();
+		if(!(option > 0)) 
+		{
+			std::cout << "Not a valid option type. Please try again!!!" << std::endl;
+			continue;
+		}
+		break;
+	}
+
+	std::cout << "Enter the quantity of item no: " << option << " that you want to add to the inventory." << std::endl;
+	while(1) 
+	{
+		std::cin >> quantity;
+		ClearInputBuffer();
+		if(!(option > -1)) 
+		{
+			std::cout << "Not a valid amount of quantity. Please try again!!!" << std::endl;
+			continue;
+		}
+		break;
+	}
+	inv.AddItem(option - 1, quantity);
+	std::cin.get();
 }
 
 void AddItemType()

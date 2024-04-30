@@ -11,8 +11,9 @@ class Inventory
 {
 	public:
 		void ListItems();
-		void AddItem(ItemType type);
+		void AddItem(int option, int quantity);
 		void AddItemType(ItemType type);
 		void ListItemTypes();
 		int ItemTypeExists(ItemType type);
+		ItemType* TypeAtIndex(int index);
 };
