@@ -10,11 +10,10 @@ void MainMenu()
 	std::cout << "1. List Items" << std::endl;
 	std::cout << "2. Add Item" << std::endl;
 	std::cout << "3. Remove Item" << std::endl;
-	std::cout << "4. Search Item" << std::endl;
-	std::cout << "5. List Item Types" << std::endl;
-	std::cout << "6. Add Item Type" << std::endl;
-	std::cout << "7. Remove Item Type" << std::endl;
-	std::cout << "8. Exit" << std::endl;
+	std::cout << "4. List Item Types" << std::endl;
+	std::cout << "5. Add Item Type" << std::endl;
+	std::cout << "6. Remove Item Type" << std::endl;
+	std::cout << "7. Exit" << std::endl;
 
 	std::cin >> option;
 	ClearInputBuffer();
@@ -27,13 +26,13 @@ void MainMenu()
 	case 2:
 		AddItem();
 		break;
-	case 5:
+	case 4:
 		ListItemTypes();
 		break;
-	case 6:
+	case 5:
 		AddItemType();
 		break;
-	case 8:
+	case 7:
 		Exit();
 		break;
 	default:
