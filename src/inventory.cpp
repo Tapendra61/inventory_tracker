@@ -3,11 +3,56 @@
 const char *ITEM_TYPE_FILE = "./res/ItemTypes.DAT";
 const char *STOCKED_ITEMS_FILE = "./res/StockedItems.DAT";
 
+void Inventory::ListItems()
+{
+	std::string line = "";
+
+	std::ifstream stocked_items_file(STOCKED_ITEMS_FILE, std::ios::in);
+
+	if (!stocked_items_file)
+	{
+		std::cout << "Error opening file StockedItems.DAT." << std::endl;
+		std::cin.get();
+		stocked_items_file.close();
+		return;
+	}
+
+	int i = 0;
+	int count = 0;
+	while (std::getline(stocked_items_file, line))
+	{
+		count++;
+		std::stringstream stream(line);
+		std::string token;
+
+		while (std::getline(stream, token, ','))
+		{
+			if (i % 3 == 0)
+			{
+				std::cout << count << "." << std::endl;
+				std::cout << "  Item Name: " << token << std::endl;
+				i++;
+				continue;
+			}
+			else if (i % 3 == 1)
+			{
+				std::cout << "  Item Price: " << token << std::endl;
+				i++;
+				continue;
+			}
+			std::cout << "  Item Quantity: " << token << std::endl;
+			i++;
+			std::cout << std::endl;
+		}
+	}
+
+	stocked_items_file.close();
+}
+
 void Inventory::AddItem(int option, int quantity)
 {
-
-	ItemType* type = TypeAtIndex(option);
-	if(type == nullptr) 
+	ItemType *type = TypeAtIndex(option);
+	if (type == nullptr)
 	{
 		std::cout << "Could not add item type of position: " << option + 1 << ". Invalid option??" << std::endl;
 		std::cin.get();
@@ -16,7 +61,7 @@ void Inventory::AddItem(int option, int quantity)
 	}
 
 	std::ofstream stocked_items_file(STOCKED_ITEMS_FILE, std::ios::app);
-	if(!stocked_items_file) 
+	if (!stocked_items_file)
 	{
 		std::cout << "Couldn't find file StockedItems.DAT. Item addition failed!!!" << std::endl;
 		stocked_items_file.close();
@@ -27,7 +72,7 @@ void Inventory::AddItem(int option, int quantity)
 
 	stocked_items_file << type->GetName() << "," << type->GetPrice() << "," << quantity << std::endl;
 
-	if(stocked_items_file.fail()) 
+	if (stocked_items_file.fail())
 	{
 		std::cout << "Failed to write data to the file!!!" << std::endl;
 		std::cin.get();
@@ -178,7 +223,7 @@ ItemType *Inventory::TypeAtIndex(int index)
 			std::string token;
 			while (std::getline(stream, token, ','))
 			{
-				if(i % 2 == 0) 
+				if (i % 2 == 0)
 				{
 					type->SetName(token);
 					i++;

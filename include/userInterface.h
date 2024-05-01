@@ -12,3 +12,4 @@ void AddItem();
 void ListItems();
 void AddItemType();
 void ListItemTypes();
+void Exit();

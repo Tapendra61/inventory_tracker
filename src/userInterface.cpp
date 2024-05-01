@@ -33,6 +33,9 @@ void MainMenu()
 	case 6:
 		AddItemType();
 		break;
+	case 8:
+		Exit();
+		break;
 	default:
 		break;
 	}
@@ -40,24 +43,30 @@ void MainMenu()
 
 void ListItems()
 {
+	ClearConsole();
+	std::cout << "Inventory Item List" << std::endl;
+	std::cout << "-----------------------------------" << std::endl;
+	Inventory inv;
+	inv.ListItems();
+	std::cin.get();
 	return;
 }
 
-void AddItem() 
+void AddItem()
 {
 	ClearConsole();
 	Inventory inv;
 	int option = 0;
 	int quantity = 0;
-	std::cout << "Add Item Menu" << std:: endl;
+	std::cout << "Add Item Menu" << std::endl;
 	std::cout << "-----------------------" << std::endl;
 	std::cout << "Which type of item would you like to add to the inventory?" << std::endl;
 	inv.ListItemTypes();
-	while(1) 
+	while (1)
 	{
 		std::cin >> option;
 		ClearInputBuffer();
-		if(!(option > 0)) 
+		if (!(option > 0))
 		{
 			std::cout << "Not a valid option type. Please try again!!!" << std::endl;
 			continue;
@@ -66,11 +75,11 @@ void AddItem()
 	}
 
 	std::cout << "Enter the quantity of item no: " << option << " that you want to add to the inventory." << std::endl;
-	while(1) 
+	while (1)
 	{
 		std::cin >> quantity;
 		ClearInputBuffer();
-		if(!(option > -1)) 
+		if (!(option > -1))
 		{
 			std::cout << "Not a valid amount of quantity. Please try again!!!" << std::endl;
 			continue;
@@ -149,4 +158,28 @@ void ListItemTypes()
 	Inventory inv;
 	inv.ListItemTypes();
 	std::cin.get();
+}
+
+void Exit()
+{
+	ClearConsole();
+	while (1)
+	{
+		char option = ' ';
+		std::cout << "Are you sure you want to exit the program?Y/N" << std::endl;
+		std::cin.get(option);
+		option = tolower(option);
+		if (option == 'y')
+		{
+			exit(0);
+		}
+		else if (option == 'n')
+		{
+			return;
+		}
+		std::cout << "Invalid Choice. Try again!!" << std::endl;
+		std::cin.get();
+		ClearInputBuffer();
+		continue;
+	}
 }
