@@ -10,6 +10,7 @@
 void MainMenu();
 void AddItem();
 void ListItems();
+void RemoveItem();
 void AddItemType();
 void ListItemTypes();
 void Exit();

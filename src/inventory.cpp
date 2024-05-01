@@ -114,7 +114,7 @@ void Inventory::AddItem(int option, int quantity)
 	}
 
 	int match_found = 0;
-	for (StockedItem& item : items_in_stock)
+	for (StockedItem &item : items_in_stock)
 	{
 		if (item.name == type->GetName())
 		{
@@ -164,6 +164,94 @@ void Inventory::AddItem(int option, int quantity)
 	delete type;
 	stocked_items_file.close();
 	return;
+}
+
+void Inventory::RemoveItem(int option, int quantity_to_remove)
+{
+	ItemType *type = TypeAtIndex(option);
+	std::vector<StockedItem> stocked_items;
+
+	std::ifstream stocked_items_file(STOCKED_ITEMS_FILE, std::ios::in);
+	if (!stocked_items_file)
+	{
+		std::cout << "Error opening file: StockedItems.DAT." << std::endl;
+		std::cin.get();
+		stocked_items_file.close();
+		delete type;
+		return;
+	}
+
+	std::string line = "";
+	int i = 0;
+	while (std::getline(stocked_items_file, line))
+	{
+		std::stringstream stream(line);
+		std::string token;
+		StockedItem read_item;
+
+		while (std::getline(stream, token, ','))
+		{
+			if (i % 3 == 0)
+			{
+				read_item.name = token;
+				i++;
+				continue;
+			}
+			else if (i % 3 == 1)
+			{
+				read_item.price = std::stof(token);
+				i++;
+				continue;
+			}
+			read_item.quantity = std::stoi(token);
+			i++;
+		}
+		stocked_items.push_back(read_item);
+	}
+
+	stocked_items_file.close();
+
+	for(StockedItem& item : stocked_items) 
+	{
+		if(item.name == type->GetName()) 
+		{
+			if(item.quantity >= quantity_to_remove) 
+			{
+				item.quantity -= quantity_to_remove;
+			}
+			else 
+			{
+				std::cout << "The item you are trying to remove has quantity of less than: " << quantity_to_remove << std::endl;
+				std::cin.get();
+				delete type;
+				return;
+			}
+		}
+	}
+
+	std::ofstream stocked_items_file_write(STOCKED_ITEMS_FILE, std::ios::trunc);
+	if(!stocked_items_file_write) 
+	{
+		std::cout << "Error opening file: StockedItems.DAT" << std::endl;
+		std::cin.get();
+		stocked_items_file_write.close();
+		delete type;
+		return;
+	}
+
+	for(StockedItem& item : stocked_items) 
+	{
+		if(item.quantity == 0) 
+		{
+			continue;
+		}
+		stocked_items_file_write << item.name << "," << item.price << "," << item.quantity << std::endl;
+	}
+
+	stocked_items_file_write.close();
+	std::cout << "Successfully removed " << quantity_to_remove << " " << type->GetName() << " from inventory." << std::endl;
+	delete type;
+	std::cin.get();
 }
 
 void Inventory::AddItemType(ItemType type)
