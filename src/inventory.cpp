@@ -52,6 +52,7 @@ void Inventory::ListItems()
 void Inventory::AddItem(int option, int quantity)
 {
 	ItemType *type = TypeAtIndex(option);
+	std::vector<StockedItem> items_in_stock;
 	if (type == nullptr)
 	{
 		std::cout << "Could not add item type of position: " << option + 1 << ". Invalid option??" << std::endl;
@@ -59,6 +60,48 @@ void Inventory::AddItem(int option, int quantity)
 		delete type;
 		return;
 	}
+
+	// Read Items from StockedItems file and store it as vector
+	std::ifstream stocked_items_file_read(STOCKED_ITEMS_FILE, std::ios::in);
+	if (!stocked_items_file_read)
+	{
+		std::cout << "Couldn't find file StockedItems.DAT. Item addition failed!!!" << std::endl;
+		stocked_items_file_read.close();
+		std::cin.get();
+		delete type;
+		return;
+	}
+
+	std::string line = "";
+
+	int i = 0;
+	int count = 0;
+	while (std::getline(stocked_items_file_read, line))
+	{
+		count++;
+		StockedItem read_stocked_item;
+		std::stringstream stream(line);
+		std::string token;
+
+		while (std::getline(stream, token, ','))
+		{
+			if (i % 3 == 0)
+			{
+				read_stocked_item.name = token;
+				i++;
+				continue;
+			}
+			else if (i % 3 == 1)
+			{
+				read_stocked_item.price = std::stof(token);
+			}
+			read_stocked_item.quantity = std::stoi(token);
+			i++;
+		}
+		items_in_stock.push_back(read_stocked_item);
+	}
+
+	stocked_items_file_read.close();
 
 	std::ofstream stocked_items_file(STOCKED_ITEMS_FILE, std::ios::app);
 	if (!stocked_items_file)
@@ -70,7 +113,43 @@ void Inventory::AddItem(int option, int quantity)
 		return;
 	}
 
-	stocked_items_file << type->GetName() << "," << type->GetPrice() << "," << quantity << std::endl;
+	int match_found = 0;
+	for (StockedItem& item : items_in_stock)
+	{
+		if (item.name == type->GetName())
+		{
+			match_found = 1;
+			item.quantity += quantity;
+		}
+	}
+
+	// The item to be added was not found in inventory/stock
+	if (!match_found)
+	{
+		StockedItem item;
+		item.name = type->GetName();
+		item.price = type->GetPrice();
+		item.quantity = quantity;
+		items_in_stock.push_back(item);
+	}
+
+	if (StockedItemsFileIsEmpty())
+	{
+		stocked_items_file << type->GetName() << "," << type->GetPrice() << "," << quantity << std::endl;
+		std::cout << "Successfully added item to the inventory." << std::endl;
+		delete type;
+		stocked_items_file.close();
+		return;
+	}
+	else
+	{
+		stocked_items_file.close();
+		stocked_items_file.open(STOCKED_ITEMS_FILE, std::ios::trunc);
+		for (StockedItem item : items_in_stock)
+		{
+			stocked_items_file << item.name << "," << item.price << "," << item.quantity << std::endl;
+		}
+	}
 
 	if (stocked_items_file.fail())
 	{
@@ -240,4 +319,22 @@ ItemType *Inventory::TypeAtIndex(int index)
 	item_type_file.close();
 	type = nullptr;
 	return type;
+}
+
+int Inventory::StockedItemsFileIsEmpty()
+{
+	std::ifstream file(STOCKED_ITEMS_FILE, std::ios::in);
+	if (!file)
+	{
+		std::cout << "Faile to open file StockedItems.DAT" << std::endl;
+		std::cin.get();
+		file.close();
+		return -1;
+	}
+	file.seekg(0, std::ios::end);
+	int final_pos = file.tellg();
+	file.seekg(0, std::ios::beg);
+	int init_pos = file.tellg();
+
+	return (final_pos - init_pos) == 0;
 }
