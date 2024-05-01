@@ -84,7 +84,8 @@ void AddItem()
 void AddItemType()
 {
 	ClearConsole();
-
+	std::cout << "Add Item Type" << std::endl;
+	std::cout << "------------------" << std::endl;
 	Inventory inv;
 	ItemType item_type;
 	std::string item_type_name;
