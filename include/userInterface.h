@@ -5,7 +5,11 @@
 #include"utility.h"
 #include<string>
 #include<cctype>
+#include<inventory.h>
 
 void MainMenu();
+void AddItem();
 void ListItems();
 void AddItemType();
+void ListItemTypes();
+void Exit();
