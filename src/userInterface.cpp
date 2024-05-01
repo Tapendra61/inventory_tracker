@@ -35,6 +35,9 @@ void MainMenu()
 	case 5:
 		AddItemType();
 		break;
+	case 6:
+		RemoveItemType();
+		break;
 	case 7:
 		Exit();
 		break;
@@ -197,6 +200,34 @@ void ListItemTypes()
 	Inventory inv;
 	inv.ListItemTypes();
 	std::cin.get();
+}
+
+void RemoveItemType() 
+{
+	ClearConsole();
+	Inventory inv;
+	int option = 0;
+	std::cout << "Remove Item Type Menu" << std::endl;
+	std::cout << "-------------------------" << std::endl;
+	std::cout << "Which item would you like to remove?" << std::endl;
+
+	// Print item types
+	inv.ListItemTypes();
+
+	while (1)
+	{
+		std::cin >> option;
+		ClearInputBuffer();
+		if (!(option > 0))
+		{
+			std::cout << "Invalid option. Please try again!!!";
+			std::cin.get();
+			continue;
+		}
+		break;
+	}
+	
+	inv.RemoveItemType(option - 1);
 }
 
 void Exit()

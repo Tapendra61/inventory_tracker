@@ -13,4 +13,5 @@ void ListItems();
 void RemoveItem();
 void AddItemType();
 void ListItemTypes();
+void RemoveItemType();
 void Exit();

@@ -20,6 +20,7 @@ class Inventory
 		int ItemTypeExists(ItemType type);
 		ItemType* TypeAtIndex(int index);
 		void RemoveItem(int option, int quantity_to_remove);
+		void RemoveItemType(int option);
 		int ItemTypesFileIsEmpty();
 		int StockedItemsFileIsEmpty();
 };

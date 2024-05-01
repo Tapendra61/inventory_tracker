@@ -168,6 +168,12 @@ void Inventory::AddItem(int option, int quantity)
 
 void Inventory::RemoveItem(int option, int quantity_to_remove)
 {
+	if (StockedItemsFileIsEmpty())
+	{
+		std::cout << "The are currently no items in stock." << std::endl;
+		std::cin.get();
+		return;
+	}
 	ItemType *type = TypeAtIndex(option);
 	std::vector<StockedItem> stocked_items;
 
@@ -211,15 +217,15 @@ void Inventory::RemoveItem(int option, int quantity_to_remove)
 
 	stocked_items_file.close();
 
-	for(StockedItem& item : stocked_items) 
+	for (StockedItem &item : stocked_items)
 	{
-		if(item.name == type->GetName()) 
+		if (item.name == type->GetName())
 		{
-			if(item.quantity >= quantity_to_remove) 
+			if (item.quantity >= quantity_to_remove)
 			{
 				item.quantity -= quantity_to_remove;
 			}
-			else 
+			else
 			{
 				std::cout << "The item you are trying to remove has quantity of less than: " << quantity_to_remove << std::endl;
 				std::cin.get();
@@ -230,7 +236,7 @@ void Inventory::RemoveItem(int option, int quantity_to_remove)
 	}
 
 	std::ofstream stocked_items_file_write(STOCKED_ITEMS_FILE, std::ios::trunc);
-	if(!stocked_items_file_write) 
+	if (!stocked_items_file_write)
 	{
 		std::cout << "Error opening file: StockedItems.DAT" << std::endl;
 		std::cin.get();
@@ -239,9 +245,9 @@ void Inventory::RemoveItem(int option, int quantity_to_remove)
 		return;
 	}
 
-	for(StockedItem& item : stocked_items) 
+	for (StockedItem &item : stocked_items)
 	{
-		if(item.quantity == 0) 
+		if (item.quantity == 0)
 		{
 			continue;
 		}
@@ -282,6 +288,121 @@ void Inventory::AddItemType(ItemType type)
 	}
 
 	item_types_file.close();
+}
+
+void Inventory::RemoveItemType(int option)
+{
+	if (ItemTypesFileIsEmpty())
+	{
+		std::cout << "There are currently no item types to remove." << std::endl;
+		std::cin.get();
+		return;
+	}
+	ItemType *type = TypeAtIndex(option);
+
+	// Read the stocked items file to see if an item the type being removed exists
+	// If it does, we cant remove that type of item yet
+	int flag = 0;
+	std::string line = "";
+	std::ifstream stocked_items_file(STOCKED_ITEMS_FILE, std::ios::in);
+	if (!stocked_items_file)
+	{
+		std::cout << "Error opening file: SockedItems.DAT!!!" << std::endl;
+		std::cin.get();
+		delete type;
+		stocked_items_file.close();
+		return;
+	}
+
+	while (std::getline(stocked_items_file, line))
+	{
+		std::stringstream stream(line);
+		std::string token;
+		while (std::getline(stream, token, ','))
+		{
+			if (type->GetName() == token)
+			{
+				flag = 1;
+			}
+		}
+	}
+
+	stocked_items_file.close();
+	if (flag)
+	{
+		std::cout << "This item type cannot be removed as it is currently stocked in inventory." << std::endl;
+		std::cin.get();
+		delete type;
+		return;
+	}
+
+	// Remove the item type from ItemTypes.DAT
+	std::vector<ItemType> item_types;
+	std::ifstream item_type_file(ITEM_TYPE_FILE, std::ios::in);
+	int i = 0;
+	if (!item_type_file)
+	{
+		std::cout << "Error opening file: ItemTypes.DAT!!!" << std::endl;
+		std::cin.get();
+		delete type;
+		item_type_file.close();
+		return;
+	}
+
+	line = "";
+	while (std::getline(item_type_file, line))
+	{
+		std::stringstream stream(line);
+		std::string token;
+		ItemType item_type;
+		while (std::getline(stream, token, ','))
+		{
+			if (i % 2 == 0)
+			{
+				item_type.SetName(token);
+				i++;
+				continue;
+			}
+			item_type.SetPrice(std::stof(token));
+			i++;
+		}
+		item_types.push_back(item_type);
+	}
+
+	item_type_file.close();
+
+	// Re-write the ItemTypes.DAT file without the ItemType to be removed
+	std::ofstream item_type_file_write(ITEM_TYPE_FILE, std::ios::trunc);
+	if (!item_type_file_write)
+	{
+		std::cout << "Error opening file: ItemTypes.DAT!!!" << std::endl;
+		std::cin.get();
+		delete type;
+		item_type_file_write.close();
+		return;
+	}
+
+	for (ItemType &item : item_types)
+	{
+		if (item.GetName() == type->GetName())
+		{
+			continue;
+		}
+		item_type_file_write << item.GetName() << "," << item.GetPrice() << std::endl;
+	}
+	if (item_type_file_write.fail())
+	{
+		std::cout << "Failed to write ItemTypes to file: ItemTypes.DAT!!!" << std::endl;
+		delete type;
+		item_type_file_write.close();
+		std::cin.get();
+		return;
+	}
+	delete type;
+	item_type_file_write.close();
+	std::cout << "Succesfully removed ItemType." << std::endl;
+	std::cin.get();
+	return;
 }
 
 void Inventory::ListItemTypes()
@@ -415,6 +536,24 @@ int Inventory::StockedItemsFileIsEmpty()
 	if (!file)
 	{
 		std::cout << "Faile to open file StockedItems.DAT" << std::endl;
+		std::cin.get();
+		file.close();
+		return -1;
+	}
+	file.seekg(0, std::ios::end);
+	int final_pos = file.tellg();
+	file.seekg(0, std::ios::beg);
+	int init_pos = file.tellg();
+
+	return (final_pos - init_pos) == 0;
+}
+
+int Inventory::ItemTypesFileIsEmpty()
+{
+	std::ifstream file(ITEM_TYPE_FILE, std::ios::in);
+	if (!file)
+	{
+		std::cout << "Faile to open file ItemTypes.DAT" << std::endl;
 		std::cin.get();
 		file.close();
 		return -1;
