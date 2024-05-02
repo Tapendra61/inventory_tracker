@@ -7,4 +7,4 @@
 void ClearInputBuffer();
 int NameMatches(std::string*, std::string*);
 void ClearConsole();
-int IsAlphabetical(std::string*) ;
+int IsAlphabetical(std::string*);

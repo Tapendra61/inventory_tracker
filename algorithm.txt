@@ -1,0 +1,65 @@
+1. List Items
+Step 1 - Start
+Step 2 - Open StockedItems.DAT file where all the items are stored
+Step 3 - Read the contents of opened file line by line
+Step 4 - For each line read from the file: format and display it to the screen
+Step 5 - End
+
+2. Add Items
+Step 1 - Start
+Step 2 - Read ItemTypes.DAT file and display it's contents to the user
+Step 3 - Ask user to pick the type of item they want to add to the inventory
+Step 4 - Ask user the amount of that type to be added
+Step 5 - Open StockedItems.DAT file in write mode and name it's object as inventory
+Setp 6 - Add the selected type of item to the inventory along with it's price and quantity
+Step 7 - If the selected type already exists in the inventory, add the new quantity to previous quantity
+Step 8 - End
+
+3. Remove Items
+Step 1 - Start
+Step 2 - Read ItemTypes.DAT file and display it's contents to the user
+Step 3 - Ask the user to select which type of item they want to remove from the inventory
+Step 4 - Ask the user to enter the quantity of item to be removed
+Step 5 - Declare a vector to store all the items in the StockedItems.DAT file
+Step 6 - Read StockedItems.DAT file and store it's contents in the vector
+Step 7 - For each item stored in vector, if the name of item matches the selected item type option:
+		 decrease the quantity of that item by user given quantity to be removed
+Step 8 - Truncate all the contents of StockedItems.DAT file
+Step 9 - Re-write the contents the vector to the file
+Step 10 - If the item in vector has the quantity of 0 then skip writing to the file
+Step 11- End
+
+4. List Item Types
+Step 1 - Start
+Step 2 - Open ItemTypes.DAT file where all the item types are stored
+Step 3 - Read the contents of opened file line by line
+Step 4 - For each line read from the file: format and display it to the screen
+Step 5 - End
+
+5. Add Item Type
+Step 1 - Start
+Step 2 - Declare object ItemType with two variables: name and price
+Step 3 - Ask user to pick the name of the ItemType they want to add
+Step 4 - Ask user the price of the ItemType to be added
+Step 5 - Open ItemTypes.DAT file in write mode
+Step 6 - If the ItemType already exists in the file, don't add he ItemType to file
+Setp 7 - Append the ItemType object's contents to ItemTypes.DAT file
+Step 8 - End
+
+6. Remove Item Type
+Step 1 - Start
+Step 2 - Declare a vector of type ItemType
+Step 3 - Read the contents of ItemTypes.DAT file and store it in the vector
+Step 4 - Display the contents of ItemTypes.DAT file to the user
+Step 5 - Ask the user to select the type of item they want to remove
+Step 7 - Check if the selected item type to be removed is in inventory
+Step 8 - If it is in inventory, prompt the user that the selected ItemType cannot be removed as it is currently stocked in inventory
+Step 9 - Else truncate the file and re-write the contents of the vector to ItemTypes.DAT file skipping he addition of ItemType to be removed
+Step 10 - End
+
+7. Exit
+Step 1 - Start
+Step 2 - Prompt the user if they really want to exit the program
+Step 3 - Display options Y and N
+Step 4 - If selected opttion is Y: exit the program
+		 Else: return to MainMenu
